@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Servicos
 {
-    public class InserirUsuarioDTO
+    public class LoginDTO
     {
-        public string Nome {  get; set; }
-
         public string Email { get; set; }
 
         public string Senha { get; set; }

@@ -16,6 +16,7 @@ builder.Services.AddDbContext<DataContext>(option =>
 );
 
 builder.Services.AddScoped<IServUsuario, ServUsuario>();
+builder.Services.AddScoped<IServLogin, ServLogin>();
 builder.Services.AddScoped<IRepoUsuario, RepoUsuario>();
 
 var app = builder.Build();
