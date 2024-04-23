@@ -5,7 +5,7 @@ namespace Repositorio
     public interface IRepoTarefa
     {
         void Inserir(Tarefas tarefa);
-        List<Tarefas> BuscarTodas();
+        List<Tarefas> BuscarTodasTarefas();
         Tarefas BuscarTarefa(int id);
         void Remover(Tarefas tarefa);
     }
@@ -25,7 +25,7 @@ namespace Repositorio
             _dataContext.SaveChanges();
         }
 
-        public List<Tarefas> BuscarTodas()
+        public List<Tarefas> BuscarTodasTarefas()
         {
             var tarefas = _dataContext.Tarefa.ToList();
 

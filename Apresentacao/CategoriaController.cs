@@ -5,21 +5,21 @@ namespace Apresentacao
 {
     [Route("api/[Controller]")]
     [ApiController]
-    public class TarefaController : ControllerBase
+    public class CategoriaController : ControllerBase
     {
-        private IServTarefa _servTarefa;
+        private IServCategoria _servCategoria;
 
-        public TarefaController(IServTarefa servTarefa)
+        public CategoriaController(IServCategoria servCategoria)
         {
-            _servTarefa = servTarefa;
+            _servCategoria = servCategoria;
         }
 
         [HttpPost]
-        public ActionResult Inserir(InserirTarefaDTO inserirTarefaDto)
+        public ActionResult Inserir(InserirCategoriaDTO inserirCategoriaDto)
         {
             try
             {
-                _servTarefa.Inserir(inserirTarefaDto);
+                _servCategoria.Inserir(inserirCategoriaDto);
 
                 return Ok();
             }
@@ -30,13 +30,13 @@ namespace Apresentacao
         }
 
         [HttpGet]
-        public IActionResult BuscarTodasTarefas()
+        public IActionResult BuscarTodasCategorias()
         {
             try
             {
-                var tarefas = _servTarefa.BuscarTodasTarefas();
+                var categorias = _servCategoria.BuscarTodasCategorias();
 
-                return Ok(tarefas);
+                return Ok(categorias);
             }
             catch (Exception e)
             {
@@ -46,13 +46,13 @@ namespace Apresentacao
 
         [Route("/api/[controller]/{id}")]
         [HttpGet]
-        public IActionResult BuscarTarefa(int id)
+        public IActionResult BuscarCategoria(int id)
         {
             try
             {
-                var tarefa = _servTarefa.BuscarTarefa(id);
+                var categoria = _servCategoria.BuscarCategoria(id);
 
-                return Ok(tarefa);
+                return Ok(categoria);
             }
             catch (Exception e)
             {
@@ -66,7 +66,7 @@ namespace Apresentacao
         {
             try
             {
-                _servTarefa.Remover(id);
+                _servCategoria.Remover(id);
 
                 return Ok();
             }

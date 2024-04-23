@@ -37,19 +37,19 @@ namespace Servicos
 
         public List<Tarefas> BuscarTodasTarefas()
         {
-            var tarefas = _repoTarefa.BuscarTodas();
+            var tarefas = _repoTarefa.BuscarTodasTarefas();
 
             return tarefas;
         }
 
         public Tarefas BuscarTarefa(int id)
         {
-            return _repoTarefa.BuscarTodas().Where(p => p.Id == id).FirstOrDefault();
+            return _repoTarefa.BuscarTodasTarefas().Where(p => p.Id == id).FirstOrDefault();
         }
 
         public void Remover(int id)
         {
-            var tarefa = _repoTarefa.BuscarTodas().Where(p => p.Id == id).FirstOrDefault();
+            var tarefa = _repoTarefa.BuscarTodasTarefas().Where(p => p.Id == id).FirstOrDefault();
 
             _repoTarefa.Remover(tarefa);
         }
