@@ -9,20 +9,23 @@ namespace Servicos
     {
         List<Tarefas> BuscarTodasTarefas();
         Tarefas BuscarTarefa(int id);
-        void Inserir(InserirTarefaDTO inserirTarefaDto);
+        Tarefas Inserir(InserirTarefaDTO inserirTarefaDto);
+        void Atualizar(Tarefas tarefa);
         void Remover(int id);
     }
 
     public class ServTarefa : IServTarefa
     {
         private IRepoTarefa _repoTarefa;
+        private IServHistorico _servHistorico;
 
-        public ServTarefa(IRepoTarefa repoTarefa)
+        public ServTarefa(IRepoTarefa repoTarefa, IServHistorico servHistorico)
         {
             _repoTarefa = repoTarefa;
+            _servHistorico = servHistorico;
         }
 
-        public void Inserir(InserirTarefaDTO inserirTarefaDto)
+        public Tarefas Inserir(InserirTarefaDTO inserirTarefaDto)
         {
             var tarefa = new Tarefas();
 
@@ -32,7 +35,9 @@ namespace Servicos
             tarefa.IdUsuario = inserirTarefaDto.IdUsuario;
             tarefa.DtValidade = inserirTarefaDto.DtValidade;
 
-            _repoTarefa.Inserir(tarefa);
+            Tarefas entityTarefa = _repoTarefa.Inserir(tarefa);
+
+            return entityTarefa;
         }
 
         public List<Tarefas> BuscarTodasTarefas()
@@ -49,9 +54,29 @@ namespace Servicos
 
         public void Remover(int id)
         {
-            var tarefa = _repoTarefa.BuscarTodasTarefas().Where(p => p.Id == id).FirstOrDefault();
+            Tarefas tarefa = _repoTarefa.BuscarTodasTarefas().Where(p => p.Id == id).FirstOrDefault();
 
-            _repoTarefa.Remover(tarefa);
+            try
+            {
+                _repoTarefa.Remover(tarefa.Id);
+                _servHistorico.Inserir(tarefa);
+            } catch (Exception e)
+            {
+                throw;
+            }
+        }
+
+        public void Atualizar(Tarefas tarefa)
+        {
+            try
+            {
+                _repoTarefa.Atualizar(tarefa);
+                _servHistorico.Inserir(tarefa);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace Entidades
 {
-    public enum StatusEnum
-    {
-        Ativo = 1,
-        Inativo = 0
-    }
-
     public class Tarefas
     {
+        public enum StatusEnum
+        {
+            Ativo = 1,
+            Inativo = 0,
+            Deletada = 9
+        }
         public int Id { get; set; }
 
         public string Titulo { get; set; }

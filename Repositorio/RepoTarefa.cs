@@ -1,13 +1,15 @@
 ﻿using Entidades;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repositorio
 {
     public interface IRepoTarefa
     {
-        void Inserir(Tarefas tarefa);
+        Tarefas Inserir(Tarefas tarefa);
         List<Tarefas> BuscarTodasTarefas();
         Tarefas BuscarTarefa(int id);
-        void Remover(Tarefas tarefa);
+        void Atualizar(Tarefas tarefa);
+        void Remover(int id);
     }
     public class RepoTarefa : IRepoTarefa
     {
@@ -18,11 +20,12 @@ namespace Repositorio
             _dataContext = dataContext;
         }
 
-        public void Inserir(Tarefas tarefa)
+        public Tarefas Inserir(Tarefas tarefa)
         {
             _dataContext.Add(tarefa);
-
             _dataContext.SaveChanges();
+
+            return tarefa;
         }
 
         public List<Tarefas> BuscarTodasTarefas()
@@ -39,10 +42,26 @@ namespace Repositorio
             return tarefa;
         }
 
-        public void Remover(Tarefas tarefa)
+        public void Remover(int id)
         {
-            _dataContext.Remove(tarefa);
+            var tarefa = _dataContext.Tarefa.FirstOrDefault(t => t.Id == id);
 
+            if (tarefa != null)
+            {
+                tarefa.Status = Tarefas.StatusEnum.Deletada; // Atualiza o status para Deletada
+                _dataContext.SaveChanges();
+            }
+        }
+
+        public void Atualizar(Tarefas tarefa)
+        {
+            // Primeiro, anexe a entidade ao contexto se ainda não estiver
+            _dataContext.Tarefa.Attach(tarefa);
+
+            // Marque as propriedades que foram modificadas como "modificadas"
+            _dataContext.Entry(tarefa).State = EntityState.Modified;
+
+            // Agora salve as alterações
             _dataContext.SaveChanges();
         }
     }

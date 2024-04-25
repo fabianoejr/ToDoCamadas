@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Apresentacao.Migrations;
+using Entidades;
+using Microsoft.AspNetCore.Mvc;
 using Servicos;
 
 namespace Apresentacao
@@ -8,10 +10,12 @@ namespace Apresentacao
     public class TarefaController : ControllerBase
     {
         private IServTarefa _servTarefa;
+        private IServHistorico _servHistorico;
 
-        public TarefaController(IServTarefa servTarefa)
+        public TarefaController(IServTarefa servTarefa, IServHistorico servHistorico)
         {
             _servTarefa = servTarefa;
+            _servHistorico = servHistorico;
         }
 
         [HttpPost]
@@ -19,7 +23,8 @@ namespace Apresentacao
         {
             try
             {
-                _servTarefa.Inserir(inserirTarefaDto);
+                Tarefas tarefa = _servTarefa.Inserir(inserirTarefaDto);
+                _servHistorico.Inserir(tarefa);
 
                 return Ok();
             }
@@ -67,6 +72,22 @@ namespace Apresentacao
             try
             {
                 _servTarefa.Remover(id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Route("/api/[controller]")]
+        [HttpPut]
+        public IActionResult Atualizar(Tarefas tarefa)
+        {
+            try
+            {
+                _servTarefa.Atualizar(tarefa);
 
                 return Ok();
             }
